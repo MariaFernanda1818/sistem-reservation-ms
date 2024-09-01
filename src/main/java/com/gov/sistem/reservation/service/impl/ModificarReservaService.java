@@ -47,8 +47,7 @@ public class ModificarReservaService implements IModificarReservaService {
                 eliminarReservas(serviciosAntiguos, servicios,reservaDTO.getCodigoReserva());
                 agregarServicios(serviciosAntiguos, servicios, reservaDTO.getCodigoReserva());
             }
-            respuestaGeneral.setMensaje("Se actualizo correctamente la reserva");
-            respuestaGeneral.setError(false);
+            respuestaGeneral.setData("Se actualizo correctamente la reserva");
             respuestaGeneral.setStatus(HttpStatus.OK);
         }catch (Exception ex){
             log.error("Error en modificar la reserva ", ex);
