@@ -23,19 +23,19 @@ public class ReservaInputController {
     @PostMapping("/crear")
     public ResponseEntity<Object> crearReserva(@RequestBody InputReservaDTO inputReservaDTO){
         RespuestaGeneralDTO respuesta = ICrearReservaService.crearReserva(inputReservaDTO.getReservaDTO(), inputReservaDTO.getListServicios());
-        return new ResponseEntity<>(Boolean.TRUE.equals(respuesta.getError()) ? respuesta.getMensaje() : respuesta.getData(),respuesta.getStatus());
+        return new ResponseEntity<>(respuesta,respuesta.getStatus());
     }
 
     @PostMapping("/modificar")
     public ResponseEntity<Object> modificarReserva(@RequestBody InputReservaDTO inputReservaDTO){
         RespuestaGeneralDTO respuesta = IModificarReservaService.modificarReserva(inputReservaDTO.getReservaDTO(), inputReservaDTO.getListServicios());
-        return new ResponseEntity<>(Boolean.TRUE.equals(respuesta.getError()) ? respuesta.getMensaje() : respuesta.getData(),respuesta.getStatus());
+        return new ResponseEntity<>(respuesta,respuesta.getStatus());
     }
 
     @DeleteMapping("/cancelar/{codigoReserva}")
     public ResponseEntity<Object> cancelarReserva(@PathVariable("codigoReserva")String codigoReserva){
         RespuestaGeneralDTO respuesta = ICancelarReservaService.cancerlaReserva(codigoReserva);
-        return new ResponseEntity<>(Boolean.TRUE.equals(respuesta.getError()) ? respuesta.getMensaje() : respuesta.getData(),respuesta.getStatus());
+        return new ResponseEntity<>(respuesta,respuesta.getStatus());
 
     }
 
