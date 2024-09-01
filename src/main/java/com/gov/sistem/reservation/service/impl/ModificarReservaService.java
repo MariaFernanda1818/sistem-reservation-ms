@@ -18,6 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 
 @Service
 @Log4j2
@@ -46,8 +47,7 @@ public class ModificarReservaService implements IModificarReservaService {
                 eliminarReservas(serviciosAntiguos, servicios,reservaDTO.getCodigoReserva());
                 agregarServicios(serviciosAntiguos, servicios, reservaDTO.getCodigoReserva());
             }
-            respuestaGeneral.setMensaje("Se actualizo correctamente la reserva");
-            respuestaGeneral.setError(false);
+            respuestaGeneral.setData("Se actualizo correctamente la reserva");
             respuestaGeneral.setStatus(HttpStatus.OK);
         }catch (Exception ex){
             log.error("Error en modificar la reserva ", ex);
@@ -59,19 +59,33 @@ public class ModificarReservaService implements IModificarReservaService {
     }
 
     private void eliminarReservas(List<ServicioDTO> serviciosAntiguos, List<ServicioDTO> serviciosNuevos, String codigoReserva){
-        List<ServicioDTO> serviciosElim = serviciosAntiguos.stream().filter(elemento -> !serviciosNuevos.contains(elemento)).toList();
-        for(ServicioDTO servicio : serviciosElim){
-            reservaServicioRepository.eliminarServicios(servicio.getCodigoServicio(), codigoReserva);
+        List<ServicioDTO> serviciosElim = serviciosAntiguos.stream().filter(
+                servicioAntiguo -> serviciosNuevos.stream().noneMatch(servicioNuevo ->
+                        servicioNuevo.getCodigoServicio().equals(servicioAntiguo.getCodigoServicio()))
+        ).toList();
+        if(!serviciosElim.isEmpty()){
+            for(ServicioDTO servicio : serviciosElim){
+                reservaServicioRepository.eliminarServicios(servicio.getCodigoServicio(), codigoReserva);
+            }
         }
     }
 
     private void agregarServicios(List<ServicioDTO> serviciosAntiguos, List<ServicioDTO> serviciosNuevos, String codigoReserva){
-        List<ServicioDTO> serviciosAgre = serviciosNuevos.stream().filter(elemento -> !serviciosAntiguos.contains(elemento)).toList();
+        List<ServicioDTO> serviciosAgre = serviciosNuevos.stream().filter(
+                servicioNuevo -> serviciosAntiguos.stream().noneMatch(servicioAntiguo ->
+                                servicioAntiguo.getCodigoServicio().equals(servicioNuevo.getCodigoServicio())
+                        )
+        ).toList();
         for(ServicioDTO servicio : serviciosAgre){
             ReservaServicioId reservaServicioId = new ReservaServicioId();
             reservaServicioId.setCodigoServicioFk(servicio.getCodigoServicio());
             reservaServicioId.setCodigoReservaFk(codigoReserva);
-            reservaServicioRepository.save(reservaServicioMapper.dtoToEntity(ReservaServicioDTO.builder().reservaServicioId(reservaServicioId).build()));
+            reservaServicioRepository.save(reservaServicioMapper.dtoToEntity(
+                    ReservaServicioDTO.builder()
+                            .reservaFk(ReservaDTO.builder().codigoReserva(codigoReserva).build())
+                            .servicioFk(ServicioDTO.builder().codigoServicio(servicio.getCodigoServicio()).build())
+                            .reservaServicioId(reservaServicioId).build())
+            );
         }
     }
 

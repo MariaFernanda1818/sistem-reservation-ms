@@ -33,11 +33,11 @@ public class CancelarReservaService implements ICancelarReservaService {
     public RespuestaGeneralDTO cancerlaReserva(String codigoReserva) {
         RespuestaGeneralDTO respuesta = new RespuestaGeneralDTO();
         try{
-            EstadoDTO estado = estadoRepository.findByNombre(EstadoEnum.CANCELADO.getDescripcion()).orElse(null);
+            EstadoDTO estado = estadoRepository.findByNombre(EstadoEnum.CANCELADO).orElse(null);
             if(estado != null) {
                 reservaRepository.actualizarEstado(estado.getIdEstado(), codigoReserva);
                 reservaServicioRepository.deleteAllByReservaFk_CodigoReserva(codigoReserva);
-                respuesta.setMensaje("Se cancelo correctamente la reserva");
+                respuesta.setData("Se cancelo correctamente la reserva");
                 respuesta.setStatus(HttpStatus.OK);
             }
         }catch (Exception e){

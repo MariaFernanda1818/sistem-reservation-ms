@@ -13,9 +13,11 @@ public interface ReservaRepository extends JpaRepository<ReservaEntity, String> 
 
     @Modifying
     @Query("""
-        UPDATE ReservaEntity SET estadoReservaFk = :idEstado where codigoReserva = :codigoReserva
+        UPDATE ReservaEntity SET estadoReservaFk.idEstado = :idEstado where codigoReserva = :codigoReserva
     """)
     @Transactional
     void actualizarEstado(@Param("idEstado") Long idEstado, @Param("codigoReserva") String codigoReserv);
+
+    Boolean existsByCodigoReserva(String codigoReserva);
 
 }
