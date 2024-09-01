@@ -1,3 +1,6 @@
+jwt:
+  expiration-time-ms: 86400000
+  secret-key: NXRR+SVc/iI0UXHhZHOBMv92pTgFVHqPZoNlNV6onIo=
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/postgres
@@ -16,3 +19,4 @@ spring:
 server:
   servlet:
     context-path: /api/v1
+  port: 8001

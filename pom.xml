@@ -32,6 +32,11 @@
 	</properties>
 	<dependencies>
 		<dependency>
+			<groupId>com.gov.sistem.reservation</groupId>
+			<artifactId>login</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
 			<groupId>com.gov.sistem</groupId>
 			<artifactId>commons</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
