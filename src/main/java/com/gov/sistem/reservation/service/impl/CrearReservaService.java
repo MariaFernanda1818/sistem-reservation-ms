@@ -12,6 +12,8 @@ import com.gov.sistem.reservation.jpa.repository.ReservaRepository;
 import com.gov.sistem.reservation.jpa.repository.ReservaServicioRepository;
 import com.gov.sistem.reservation.jpa.repository.ServiciosRepository;
 import com.gov.sistem.reservation.service.ICrearReservaService;
+import com.gov.sistem.reservation.util.enums.InicialesCodEnum;
+import com.gov.sistem.reservation.util.helper.Utilidades;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -41,16 +43,20 @@ public class CrearReservaService implements ICrearReservaService {
     public RespuestaGeneralDTO crearReserva(ReservaDTO reservaDTO, List<ServicioDTO> listServicios) {
         RespuestaGeneralDTO respuestaGeneralDTO = new RespuestaGeneralDTO();
         try{
+            String codigoReserva = generarCodigo();
+            reservaDTO.setCodigoReserva(codigoReserva);
             reservaDTO.setFechaCreacionReserva(LocalDate.now());
             log.info("Se creara la reserva");
-            String codigoReserva = reservaMapper.entityToDto(reservaRepository.save(reservaMapper.dtoToEntity(reservaDTO))).getCodigoReserva();
+            reservaMapper.entityToDto(reservaRepository.save(reservaMapper.dtoToEntity(reservaDTO))).getCodigoReserva();
             log.info("Se juntara la reserva con los servicios");
             for(ServicioDTO servicio : listServicios){
                 ReservaServicioId ids = new ReservaServicioId();
                 ids.setCodigoReservaFk(codigoReserva);
                 ids.setCodigoServicioFk(servicio.getCodigoServicio());
-                ReservaServicioDTO reservaServicioDTO = new ReservaServicioDTO();
-                reservaServicioDTO.setReservaServicioId(ids);
+                ReservaServicioDTO reservaServicioDTO = ReservaServicioDTO.builder()
+                        .reservaServicioId(ids)
+                        .reservaFk(ReservaDTO.builder().codigoReserva(codigoReserva).build())
+                        .servicioFk(ServicioDTO.builder().codigoServicio(servicio.getCodigoServicio()).build()).build();
                 reservaServicioRepository.save(reservaServicioMapper.dtoToEntity(reservaServicioDTO));
             }
             respuestaGeneralDTO.setStatus(HttpStatus.CREATED);
@@ -62,4 +68,16 @@ public class CrearReservaService implements ICrearReservaService {
         }
         return respuestaGeneralDTO;
     }
+
+    private String generarCodigo(){
+        String codigo;
+        while (true){
+            codigo = Utilidades.generarCodigo(InicialesCodEnum.RES);
+            if(!reservaRepository.existsByCodigoReserva(codigo)){
+                break;
+            }
+        }
+        return codigo;
+    }
+
 }

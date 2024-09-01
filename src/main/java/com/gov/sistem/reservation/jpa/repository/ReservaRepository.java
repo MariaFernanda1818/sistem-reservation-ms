@@ -18,4 +18,6 @@ public interface ReservaRepository extends JpaRepository<ReservaEntity, String> 
     @Transactional
     void actualizarEstado(@Param("idEstado") Long idEstado, @Param("codigoReserva") String codigoReserv);
 
+    Boolean existsByCodigoReserva(String codigoReserva);
+
 }
