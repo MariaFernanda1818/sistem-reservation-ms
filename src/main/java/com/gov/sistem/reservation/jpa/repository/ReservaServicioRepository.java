@@ -19,4 +19,7 @@ public interface ReservaServicioRepository extends JpaRepository<ReservaServicio
         delete from reservation.reserva_servicio where servicio_fk = :codigoServicio and reserva_fk =:codigoReserva
     """, nativeQuery = true)
     void eliminarServicios(@Param("codigoServicio") String codigoServicio, @Param("codigoReserva")String codigoReserva);
+
+    void deleteAllByReservaFk_CodigoReserva(String codigoReserva);
+
 }

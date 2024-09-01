@@ -3,7 +3,6 @@ package com.gov.sistem.reservation.service.impl;
 import com.gov.sistem.reservation.commons.dto.ReservaDTO;
 import com.gov.sistem.reservation.commons.dto.ReservaServicioDTO;
 import com.gov.sistem.reservation.commons.dto.ServicioDTO;
-import com.gov.sistem.reservation.commons.entity.ReservaServicioEntity;
 import com.gov.sistem.reservation.commons.entity.embeddable.ReservaServicioId;
 import com.gov.sistem.reservation.commons.util.mapper.ReservaMapper;
 import com.gov.sistem.reservation.commons.util.mapper.ReservaServicioMapper;
@@ -11,7 +10,7 @@ import com.gov.sistem.reservation.dto.RespuestaGeneralDTO;
 import com.gov.sistem.reservation.jpa.repository.ReservaRepository;
 import com.gov.sistem.reservation.jpa.repository.ReservaServicioRepository;
 import com.gov.sistem.reservation.service.IModificarReservaService;
-import com.gov.sistem.reservation.util.mapper.ServicioMapper;
+import com.gov.sistem.reservation.util.mapper.ServicioNextMapper;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -19,8 +18,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @Log4j2
@@ -35,7 +32,7 @@ public class ModificarReservaService implements IModificarReservaService {
 
     private final ReservaServicioMapper reservaServicioMapper;
 
-    private final ServicioMapper servicioMapper;
+    private final ServicioNextMapper servicioNextMapper;
 
     @Override
     @Transactional
@@ -45,7 +42,7 @@ public class ModificarReservaService implements IModificarReservaService {
             reservaRepository.save(reservaMapper.dtoToEntity(reservaDTO));
             List<ReservaServicioDTO> listServicios = reservaServicioMapper.listEntityToListDto(reservaServicioRepository.findAllByReservaServicioId_CodigoReservaFk(reservaDTO.getCodigoReserva()).orElse(null));
             if(listServicios != null && !listServicios.isEmpty()){
-                List<ServicioDTO> serviciosAntiguos = servicioMapper.listReservaServicioToListServicio(listServicios);
+                List<ServicioDTO> serviciosAntiguos = servicioNextMapper.listReservaServicioToListServicio(listServicios);
                 eliminarReservas(serviciosAntiguos, servicios,reservaDTO.getCodigoReserva());
                 agregarServicios(serviciosAntiguos, servicios, reservaDTO.getCodigoReserva());
             }

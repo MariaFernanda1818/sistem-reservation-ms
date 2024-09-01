@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Mapper(componentModel = "spring")
-public interface ServicioMapper {
+public interface ServicioNextMapper {
 
     default List<ServicioDTO> listReservaServicioToListServicio(List<ReservaServicioDTO> listReservaServicio){
 
