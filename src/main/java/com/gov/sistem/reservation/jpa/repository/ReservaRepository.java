@@ -35,8 +35,12 @@ public interface ReservaRepository extends JpaRepository<ReservaEntity, String> 
           WHERE (:fechaInicio IS NULL OR r.fecha_inicio_reserva =  TO_DATE(:fechaInicio, 'YYYY-MM-DD'))
             AND (:nombreServicio IS NULL OR s.nombre_servicio LIKE '%' || :nombreServicio || '%')
             AND (:codigoCliente IS NULL OR c.codigo_cliente = :codigoCliente)
+            AND (:nombreCliente IS NULL or c.nombre_cliente = :nombreCliente)
             """, nativeQuery = true)
-    List<Object[]> buscarReservasCliente(@Param("fechaInicio") String fechaInicio, @Param("nombreServicio") String nombreServicio, @Param("codigoCliente") String codigoCliente);
+    List<Object[]> buscarReservasCliente(@Param("fechaInicio") String fechaInicio,
+                                         @Param("nombreServicio") String nombreServicio,
+                                         @Param("codigoCliente") String codigoCliente,
+                                         @Param("nombreCliente") String nombreCliente);
 
 
 }

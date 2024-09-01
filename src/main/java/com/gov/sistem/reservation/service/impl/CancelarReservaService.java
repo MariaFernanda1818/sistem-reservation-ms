@@ -11,6 +11,7 @@ import com.gov.sistem.reservation.jpa.repository.EstadoRepository;
 import com.gov.sistem.reservation.jpa.repository.ReservaRepository;
 import com.gov.sistem.reservation.jpa.repository.ReservaServicioRepository;
 import com.gov.sistem.reservation.service.ICancelarReservaService;
+import com.gov.sistem.reservation.util.helper.MensajesConstants;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -33,16 +34,19 @@ public class CancelarReservaService implements ICancelarReservaService {
     public RespuestaGeneralDTO cancerlaReserva(String codigoReserva) {
         RespuestaGeneralDTO respuesta = new RespuestaGeneralDTO();
         try{
+            log.info(MensajesConstants.INFO_CONSULTA_ESTADO);
             EstadoDTO estado = estadoRepository.findByNombre(EstadoEnum.CANCELADO).orElse(null);
             if(estado != null) {
+                log.info(MensajesConstants.INFO_ACTUALIZA_ESTADO_RESERVA);
                 reservaRepository.actualizarEstado(estado.getIdEstado(), codigoReserva);
+                log.info(MensajesConstants.INFO_ELIMINA_SERVICIOS_RESERVA);
                 reservaServicioRepository.deleteAllByReservaFk_CodigoReserva(codigoReserva);
-                respuesta.setData("Se cancelo correctamente la reserva");
+                respuesta.setData(MensajesConstants.CANCELA_RESERVA);
                 respuesta.setStatus(HttpStatus.OK);
             }
         }catch (Exception e){
-            log.error("Error en cancelar la reserva", e);
-            respuesta.setMensaje("Error general");
+            log.error(MensajesConstants.ERROR_CANCELAR_RESERVA, e);
+            respuesta.setMensaje(MensajesConstants.ERROR_GENERAL);
             respuesta.setStatus(HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return respuesta;

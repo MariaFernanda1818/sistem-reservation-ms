@@ -10,6 +10,7 @@ import com.gov.sistem.reservation.dto.RespuestaGeneralDTO;
 import com.gov.sistem.reservation.jpa.repository.ReservaRepository;
 import com.gov.sistem.reservation.jpa.repository.ReservaServicioRepository;
 import com.gov.sistem.reservation.service.IModificarReservaService;
+import com.gov.sistem.reservation.util.helper.MensajesConstants;
 import com.gov.sistem.reservation.util.mapper.ServicioNextMapper;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -40,18 +41,22 @@ public class ModificarReservaService implements IModificarReservaService {
     public RespuestaGeneralDTO modificarReserva(ReservaDTO reservaDTO, List<ServicioDTO> servicios) {
         RespuestaGeneralDTO respuestaGeneral = new RespuestaGeneralDTO();
         try{
+            log.info(MensajesConstants.INFO_ACTUALIZA_RESERVA);
             reservaRepository.save(reservaMapper.dtoToEntity(reservaDTO));
+            log.info(MensajesConstants.INFO_CONSULTA_RESERVA_SERVICIO);
             List<ReservaServicioDTO> listServicios = reservaServicioMapper.listEntityToListDto(reservaServicioRepository.findAllByReservaServicioId_CodigoReservaFk(reservaDTO.getCodigoReserva()).orElse(null));
             if(listServicios != null && !listServicios.isEmpty()){
                 List<ServicioDTO> serviciosAntiguos = servicioNextMapper.listReservaServicioToListServicio(listServicios);
+                log.info(MensajesConstants.INFO_ELIMINACION_SERVICIOS);
                 eliminarReservas(serviciosAntiguos, servicios,reservaDTO.getCodigoReserva());
+                log.info(MensajesConstants.INFO_ACTUALIZACION_SERVICIOS);
                 agregarServicios(serviciosAntiguos, servicios, reservaDTO.getCodigoReserva());
             }
-            respuestaGeneral.setData("Se actualizo correctamente la reserva");
+            respuestaGeneral.setData(MensajesConstants.ACTUALIZACION_RESERVA);
             respuestaGeneral.setStatus(HttpStatus.OK);
         }catch (Exception ex){
-            log.error("Error en modificar la reserva ", ex);
-            respuestaGeneral.setMensaje("Error general del sistema");
+            log.error(MensajesConstants.ERROR_MODIFICAR_RESERVA, ex);
+            respuestaGeneral.setMensaje(MensajesConstants.ERROR_GENERAL);
             respuestaGeneral.setError(true);
             respuestaGeneral.setStatus(HttpStatus.INTERNAL_SERVER_ERROR);
         }

@@ -17,6 +17,7 @@ import com.gov.sistem.reservation.jpa.repository.ReservaRepository;
 import com.gov.sistem.reservation.jpa.repository.ReservaServicioRepository;
 import com.gov.sistem.reservation.jpa.repository.ServiciosRepository;
 import com.gov.sistem.reservation.service.ICrearReservaService;
+import com.gov.sistem.reservation.util.helper.MensajesConstants;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -51,19 +52,20 @@ public class CrearReservaService implements ICrearReservaService {
         RespuestaGeneralDTO respuestaGeneralDTO = new RespuestaGeneralDTO();
         try{
             String codigoReserva = generarCodigo();
+            log.info(MensajesConstants.INFO_CONSULTA_ESTADO);
             EstadoDTO estado = estadoRepository.findByNombre(EstadoEnum.ACTIVO).orElse(null);
             if(estado == null){
-                log.error("Error en la busqueda del estado");
+                log.error(MensajesConstants.ERROR_BUSQUEDA_ESTADO);
                 respuestaGeneralDTO.setStatus(HttpStatus.INTERNAL_SERVER_ERROR);
-                respuestaGeneralDTO.setMensaje("Hubo un error en crear la reserva");
+                respuestaGeneralDTO.setMensaje(MensajesConstants.ERROR_GENERAL);
                 return respuestaGeneralDTO;
             }
             reservaDTO.setEstadoReservaFk(estado);
             reservaDTO.setCodigoReserva(codigoReserva);
             reservaDTO.setFechaCreacionReserva(LocalDate.now());
-            log.info("Se creara la reserva");
+            log.info(MensajesConstants.INFO_CREAR_RESERVA);
             reservaMapper.entityToDto(reservaRepository.save(reservaMapper.dtoToEntity(reservaDTO))).getCodigoReserva();
-            log.info("Se juntara la reserva con los servicios");
+            log.info(MensajesConstants.INFO_RESERVA_SERVICIOS);
             for(ServicioDTO servicio : listServicios){
                 ReservaServicioId ids = new ReservaServicioId();
                 ids.setCodigoReservaFk(codigoReserva);
@@ -75,11 +77,11 @@ public class CrearReservaService implements ICrearReservaService {
                 reservaServicioRepository.save(reservaServicioMapper.dtoToEntity(reservaServicioDTO));
             }
             respuestaGeneralDTO.setStatus(HttpStatus.CREATED);
-            respuestaGeneralDTO.setData("Se creo correctamente la reserva");
+            respuestaGeneralDTO.setData(MensajesConstants.CREAR_RESERVA);
         }catch (Exception e){
-            log.error("Error al crear la reserva", e);
+            log.error(MensajesConstants.ERROR_CREAR_RESERVA, e);
             respuestaGeneralDTO.setStatus(HttpStatus.INTERNAL_SERVER_ERROR);
-            respuestaGeneralDTO.setMensaje("Hubo un error en crear la reserva");
+            respuestaGeneralDTO.setMensaje(MensajesConstants.ERROR_GENERAL);
         }
         return respuestaGeneralDTO;
     }
