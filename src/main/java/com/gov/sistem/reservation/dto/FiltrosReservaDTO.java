@@ -8,7 +8,5 @@ import java.time.LocalDate;
 public class FiltrosReservaDTO {
 
     private LocalDate fecha;
-    private String nombreServicio;
     private String codigoCliente;
-    private String nombreCliente;
 }

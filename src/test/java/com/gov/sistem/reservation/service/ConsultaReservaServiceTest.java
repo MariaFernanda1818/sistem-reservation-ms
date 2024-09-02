@@ -44,7 +44,7 @@ public class ConsultaReservaServiceTest {
     @DisplayName("Se prueba el service de buscar reservas")
     public void buscarReservas() throws IOException {
         FiltrosReservaDTO filtrosReservas = Utilidades.convertJsonToDto(new File("src/test/resources/filtrosReservas.json"), FiltrosReservaDTO.class);
-        when(reservaRepository.buscarReservasCliente(any(), any(), any(), any())).thenReturn(new ArrayList<>());
+        when(reservaRepository.buscarReservasCliente(any(), any())).thenReturn(new ArrayList<>());
         RespuestaGeneralDTO respuestaGeneralDTO = consultaReservaService.buscarReservas(filtrosReservas);
         Assertions.assertEquals(RespuestaGeneralDTO.builder().status(HttpStatus.OK).mensaje(MensajesConstants.CONSULTA_RESERVAS_FILTROS).data(new ArrayList<>()).build(), respuestaGeneralDTO);
     }

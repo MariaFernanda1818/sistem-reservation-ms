@@ -23,4 +23,5 @@ public interface ServiciosRepository extends JpaRepository<ServicioEntity, Strin
     List<ServicioEntity> buscarServiciosFiltros(@Param("nombreServicio") String nombreServicio, @Param("costoMin") Double costoMin,
                                                 @Param("costoMax") Double costoMax);
 
+
 }

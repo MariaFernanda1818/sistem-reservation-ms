@@ -32,9 +32,7 @@ public class ConsultaReservaService implements IConsultaReservaService {
             log.info(MensajesConstants.INFO_CONSULTA_RESERVAS_FILTROS);
             List<ReservaDTO> listReservas = reservaNextMapper.listObjectToListDto(reservaRepository.buscarReservasCliente(
                     Utilidades.checkType(filtrosReservas.getFecha(), String.class).orElse(null),
-                    filtrosReservas.getNombreServicio(),
-                    filtrosReservas.getCodigoCliente(),
-                    filtrosReservas.getNombreCliente()
+                    filtrosReservas.getCodigoCliente()
             ));
             respuestaGeneralDTO.setData(listReservas);
             respuestaGeneralDTO.setMensaje(MensajesConstants.CONSULTA_RESERVAS_FILTROS);

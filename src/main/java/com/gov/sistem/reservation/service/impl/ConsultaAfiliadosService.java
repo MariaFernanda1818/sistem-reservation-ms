@@ -36,7 +36,6 @@ public class ConsultaAfiliadosService implements IConsultaAfiliadosService {
         try{
             log.info(MensajesConstants.INFO_CONSULTA_AFILIADOS);
             List<AfiliadoServicioEntity> listAfiliados = afiliadoServiceNextMapper.listObjectToListDto(afiliadoServicioRepository.informacionAfiliadoServicio(idTipoAfiliado));
-            List<AfiliadoServicioDTO> afiliadoServicioDTOList = new ArrayList<>();
             List<ServicioDTO> servicioDTOS = new ArrayList<>();
             List<ResponseAfiliadoServicioDTO> responseAfiliadoServicioDTOList = new ArrayList<>();
             String codigoAfiliado = "";
@@ -48,6 +47,7 @@ public class ConsultaAfiliadosService implements IConsultaAfiliadosService {
                 if(afiliado.getAfiliadoFk().getCodigoAfiliado() != codigoAfiliado){
                     ResponseAfiliadoServicioDTO responseAfiliadoServicioDTO = new ResponseAfiliadoServicioDTO();
                     responseAfiliadoServicioDTO.setCodigoAfiliado(codigoAfiliado);
+                    responseAfiliadoServicioDTO.setNombreAfiliado(afiliado.getAfiliadoFk().getNombreAfiliado());
                     responseAfiliadoServicioDTO.setServicios(servicioDTOS);
                     responseAfiliadoServicioDTOList.add(responseAfiliadoServicioDTO);
                     codigoAfiliado = afiliado.getAfiliadoFk().getCodigoAfiliado();
@@ -61,6 +61,7 @@ public class ConsultaAfiliadosService implements IConsultaAfiliadosService {
                 if(cantidad == listAfiliados.size()){
                     ResponseAfiliadoServicioDTO responseAfiliadoServicioDTO = new ResponseAfiliadoServicioDTO();
                     responseAfiliadoServicioDTO.setCodigoAfiliado(codigoAfiliado);
+                    responseAfiliadoServicioDTO.setNombreAfiliado(afiliado.getAfiliadoFk().getNombreAfiliado());
                     responseAfiliadoServicioDTO.setServicios(servicioDTOS);
                     responseAfiliadoServicioDTOList.add(responseAfiliadoServicioDTO);
                 }

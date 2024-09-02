@@ -9,6 +9,6 @@ import java.util.List;
 public interface IModificarReservaService {
 
 
-    RespuestaGeneralDTO modificarReserva(ReservaDTO reservaDTO, List<ServicioDTO> servicios);
+    RespuestaGeneralDTO modificarReserva(ReservaDTO reservaDTO);
 
 }

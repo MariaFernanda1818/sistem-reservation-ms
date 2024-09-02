@@ -2,6 +2,7 @@ package com.gov.sistem.reservation.service.impl;
 
 import com.gov.sistem.reservation.commons.dto.ReservaDTO;
 import com.gov.sistem.reservation.commons.dto.ServicioDTO;
+import com.gov.sistem.reservation.commons.entity.ReservaEntity;
 import com.gov.sistem.reservation.commons.util.mapper.ReservaMapper;
 import com.gov.sistem.reservation.dto.RespuestaGeneralDTO;
 import com.gov.sistem.reservation.jpa.repository.ReservaRepository;
@@ -28,11 +29,14 @@ public class ModificarReservaService implements IModificarReservaService {
 
     @Override
     @Transactional
-    public RespuestaGeneralDTO modificarReserva(ReservaDTO reservaDTO, List<ServicioDTO> servicios) {
+    public RespuestaGeneralDTO modificarReserva(ReservaDTO reservaDTO) {
         RespuestaGeneralDTO respuestaGeneral = new RespuestaGeneralDTO();
         try{
+            ReservaEntity reservaEntity = reservaRepository.findById(reservaDTO.getCodigoReserva()).orElse(null);
+            reservaEntity.setFechaInicioReserva(reservaDTO.getFechaInicioReserva());
+            reservaEntity.setFechaFinReserva(reservaDTO.getFechaFinReserva());
             log.info(MensajesConstants.INFO_ACTUALIZA_RESERVA);
-            reservaRepository.save(reservaMapper.dtoToEntity(reservaDTO));
+            reservaRepository.save(reservaEntity);
             respuestaGeneral.setMensaje(MensajesConstants.ACTUALIZACION_RESERVA);
             respuestaGeneral.setStatus(HttpStatus.OK);
         }catch (Exception ex){

@@ -3,17 +3,22 @@ package com.gov.sistem.reservation.service.impl;
 import com.gov.sistem.reservation.commons.dto.EstadoDTO;
 import com.gov.sistem.reservation.commons.dto.ReservaDTO;
 import com.gov.sistem.reservation.commons.dto.ServicioDTO;
+import com.gov.sistem.reservation.commons.entity.AfiliadoServicioEntity;
 import com.gov.sistem.reservation.commons.util.enums.EstadoEnum;
 import com.gov.sistem.reservation.commons.util.enums.InicialesCodEnum;
 import com.gov.sistem.reservation.commons.util.helper.Utilidades;
+import com.gov.sistem.reservation.commons.util.mapper.AfiliadoServicioMapper;
 import com.gov.sistem.reservation.commons.util.mapper.EstadoMapper;
 import com.gov.sistem.reservation.commons.util.mapper.ReservaMapper;
+import com.gov.sistem.reservation.commons.util.mapper.ServicioMapper;
 import com.gov.sistem.reservation.dto.RespuestaGeneralDTO;
+import com.gov.sistem.reservation.jpa.repository.AfiliadoServicioRepository;
 import com.gov.sistem.reservation.jpa.repository.EstadoRepository;
 import com.gov.sistem.reservation.jpa.repository.ReservaRepository;
 import com.gov.sistem.reservation.jpa.repository.ServiciosRepository;
 import com.gov.sistem.reservation.service.ICrearReservaService;
 import com.gov.sistem.reservation.util.helper.MensajesConstants;
+import com.gov.sistem.reservation.util.mapper.AfiliadoServiceNextMapper;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -21,6 +26,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -34,13 +40,13 @@ public class CrearReservaService implements ICrearReservaService {
 
     private final EstadoRepository estadoRepository;
 
-    private final EstadoMapper estadoMapper;
+    private final AfiliadoServiceNextMapper afiliadoServiceNextMapper;
 
-    private final ServiciosRepository serviciosRepository;
+    private final AfiliadoServicioRepository afiliadoServicioRepository;
 
     @Override
     @Transactional
-    public RespuestaGeneralDTO crearReserva(ReservaDTO reservaDTO, List<ServicioDTO> listServicios) {
+    public RespuestaGeneralDTO crearReserva(ReservaDTO reservaDTO) {
         RespuestaGeneralDTO respuestaGeneralDTO = new RespuestaGeneralDTO();
         try{
             String codigoReserva = generarCodigo();
@@ -52,6 +58,13 @@ public class CrearReservaService implements ICrearReservaService {
                 respuestaGeneralDTO.setMensaje(MensajesConstants.ERROR_GENERAL);
                 return respuestaGeneralDTO;
             }
+            List<AfiliadoServicioEntity> listAfiliados = afiliadoServiceNextMapper.listObjectToListDto(afiliadoServicioRepository.informacionAfiliadoCodigo(reservaDTO.getAfiliadoReservaFk().getCodigoAfiliado()));
+            log.info(MensajesConstants.INFO_CONSULTA_AFILIADOS);
+            Double total = 0.0;
+            for(AfiliadoServicioEntity afiliado : listAfiliados){
+                total+=afiliado.getServicioFk().getCostoServicio();
+            }
+            reservaDTO.setCostoTotalReserva(total);
             reservaDTO.setEstadoReservaFk(estado);
             reservaDTO.setCodigoReserva(codigoReserva);
             reservaDTO.setFechaCreacionReserva(LocalDate.now());

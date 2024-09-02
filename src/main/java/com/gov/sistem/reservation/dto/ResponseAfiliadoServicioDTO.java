@@ -12,4 +12,6 @@ public class ResponseAfiliadoServicioDTO {
 
     private String codigoAfiliado;
 
+    private String nombreAfiliado;
+
 }

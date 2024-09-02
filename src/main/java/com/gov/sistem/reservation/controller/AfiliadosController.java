@@ -1,6 +1,5 @@
 package com.gov.sistem.reservation.controller;
 
-import com.gov.sistem.reservation.dto.FiltrosServicioDTO;
 import com.gov.sistem.reservation.dto.RespuestaGeneralDTO;
 import com.gov.sistem.reservation.service.IConsultaAfiliadosService;
 import com.gov.sistem.reservation.util.helper.ApiEndpointsConstants;
@@ -15,7 +14,7 @@ public class AfiliadosController {
 
     private final IConsultaAfiliadosService iConsultaAfiliadosService;
 
-    @GetMapping("consultarAfilTipoAfil")
+    @GetMapping("consultarAfilTipo")
     public ResponseEntity<Object> consultarAfiliadoTipoAfiliado(@RequestParam("idTipoAfiliado") Long idTipoAfiliado){
         RespuestaGeneralDTO respuesta = iConsultaAfiliadosService.consultarAfiliadosTipoAfiliado(idTipoAfiliado);
         return new ResponseEntity<>(respuesta,respuesta.getStatus());

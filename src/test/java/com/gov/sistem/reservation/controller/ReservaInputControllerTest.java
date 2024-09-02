@@ -1,5 +1,6 @@
 package com.gov.sistem.reservation.controller;
 
+import com.gov.sistem.reservation.commons.dto.ReservaDTO;
 import com.gov.sistem.reservation.dto.InputReservaDTO;
 import com.gov.sistem.reservation.dto.RespuestaGeneralDTO;
 import com.gov.sistem.reservation.service.ICancelarReservaService;
@@ -37,20 +38,18 @@ public class ReservaInputControllerTest {
     @Test
     @DisplayName("Se prueba el controller de crear reserva")
     public void crearPrestamoControllerTest(){
-        InputReservaDTO inputReservaDTO = new InputReservaDTO();
-        when(iCrearReservaService.crearReserva(inputReservaDTO.getReservaDTO(), inputReservaDTO.getListServicios()))
+        when(iCrearReservaService.crearReserva(new ReservaDTO()))
                 .thenReturn(RespuestaGeneralDTO.builder().status(HttpStatus.CREATED).data(MensajesConstants.CREAR_RESERVA).build());
-        ResponseEntity<Object> resp = reservaInputController.crearReserva(inputReservaDTO);
+        ResponseEntity<Object> resp = reservaInputController.crearReserva(new ReservaDTO());
         Assertions.assertEquals(RespuestaGeneralDTO.builder().status(HttpStatus.CREATED).data(MensajesConstants.CREAR_RESERVA).build(), resp.getBody());
     }
 
     @Test
     @DisplayName("Se prueba el controller de modificar reserva")
     public void modificarReserva() {
-        InputReservaDTO inputReservaDTO = new InputReservaDTO();
-        when(iModificarReservaService.modificarReserva(inputReservaDTO.getReservaDTO(), inputReservaDTO.getListServicios()))
+        when(iModificarReservaService.modificarReserva(new ReservaDTO()))
                 .thenReturn(RespuestaGeneralDTO.builder().status(HttpStatus.OK).data(MensajesConstants.ACTUALIZACION_RESERVA).build());
-        ResponseEntity<Object> resp = reservaInputController.modificarReserva(inputReservaDTO);
+        ResponseEntity<Object> resp = reservaInputController.modificarReserva(new ReservaDTO());
         Assertions.assertEquals(RespuestaGeneralDTO.builder().status(HttpStatus.OK).data(MensajesConstants.ACTUALIZACION_RESERVA).build(), resp.getBody());
     }
 

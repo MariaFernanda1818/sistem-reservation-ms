@@ -8,6 +8,6 @@ import java.util.List;
 
 public interface ICrearReservaService {
 
-    RespuestaGeneralDTO crearReserva(ReservaDTO reservaDTO, List<ServicioDTO> listServicios);
+    RespuestaGeneralDTO crearReserva(ReservaDTO reservaDTO);
 
 }
