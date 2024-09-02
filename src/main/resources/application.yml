@@ -1,3 +1,12 @@
+jwt:
+  expiration-time-ms: 86400000
+  secret-key: NXRR+SVc/iI0UXHhZHOBMv92pTgFVHqPZoNlNV6onIo=
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /doc/swagger-ui.html
+  paths-to-match: /input/**, /output/**, /servicio/**, /afiliado/**
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/postgres
@@ -6,15 +15,11 @@ spring:
     driver-class-name: org.postgresql.Driver
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
-    hibernate:
-      ddl-auto: none
     show-sql: true
-    properties:
-      hibernate:
-        default_schema: reservation
   application:
     name: reservation
 
 server:
   servlet:
     context-path: /api/v1
+  port: 8001
