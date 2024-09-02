@@ -7,6 +7,7 @@ public class ApiEndpointsConstants {
     public static final String BASE_INPUT = "/input";
     public static final String BASE_OUTPUT = "/output";
     public static final String BASE_SERVICIO = "/servicio";
+    public static final String BASE_AFILIADO = "/afiliado";
 
     public static final String INPUT_CREAR = "/crear";
     public static final String INPUT_MODIFICAR = "/modificar";

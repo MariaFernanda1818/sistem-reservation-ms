@@ -13,14 +13,14 @@ import java.util.List;
 public interface AfiliadoServicioRepository  extends JpaRepository<AfiliadoServicioEntity, AfiliadoEntity> {
 
     @Query("""
-        SELECT ae FROM AfiliadoServicioEntity ae where ae.afiliadoFk.tipoAfiliadoFk.idTipoAfiliado = :idTipoAfiliado
+        SELECT ae.afiliadoFk, ae.servicioFk, ae.afiliadoServicioId FROM AfiliadoServicioEntity ae where ae.afiliadoFk.tipoAfiliadoFk.idTipoAfiliado = :idTipoAfiliado
     """)
-    List<AfiliadoServicioEntity> informacionAfiliadoServicio(@Param("idTipoAfiliado") Long idTipoAfiliado);
+    List<Object[]> informacionAfiliadoServicio(@Param("idTipoAfiliado") Long idTipoAfiliado);
 
     @Query(value = """
-        SELECT * FROM reservation.afiliado_servicio ae inner join reservation.afiliado a on a.codigo_afiliado = ae.afiliado_fk
-        where a.codigo_afiliado = :codigoAfiliado
-    """, nativeQuery = true)
-    List<AfiliadoServicioEntity> informacionAfiliadoCodigo(@Param("codigoAfiliado") String codigoAfiliado);
+               SELECT ae.afiliadoFk, ae.servicioFk, ae.afiliadoServicioId FROM AfiliadoServicioEntity as ae 
+                              where ae.afiliadoServicioId.codigoAfiliado = :codigoAfiliado
+    """)
+    List<Object[]> informacionAfiliadoCodigo(@Param("codigoAfiliado") String codigoAfiliado);
 
 }

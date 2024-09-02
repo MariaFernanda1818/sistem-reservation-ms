@@ -69,6 +69,12 @@
 			<artifactId>lombok</artifactId>
 			<optional>true</optional>
 		</dependency>
+		<dependency>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+			<version>2.6.0</version>
+		</dependency>
+
 		<!-- https://mvnrepository.com/artifact/com.google.code.gson/gson -->
 		<dependency>
 			<groupId>com.google.code.gson</groupId>
@@ -116,6 +122,7 @@
 							<goal>prepare-agent</goal>
 						</goals>
 					</execution>
+
 					<!-- Este goal genera el informe después de correr las pruebas -->
 					<execution>
 						<id>report</id>

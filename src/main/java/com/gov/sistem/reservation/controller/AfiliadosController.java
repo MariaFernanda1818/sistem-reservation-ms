@@ -2,22 +2,30 @@ package com.gov.sistem.reservation.controller;
 
 import com.gov.sistem.reservation.dto.FiltrosServicioDTO;
 import com.gov.sistem.reservation.dto.RespuestaGeneralDTO;
+import com.gov.sistem.reservation.service.IConsultaAfiliadosService;
 import com.gov.sistem.reservation.util.helper.ApiEndpointsConstants;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(ApiEndpointsConstants.BASE_INPUT)
+@RequestMapping(ApiEndpointsConstants.BASE_AFILIADO)
 @RequiredArgsConstructor
 public class AfiliadosController {
 
-    @PostMapping(ApiEndpointsConstants.SERVICIO_CONSULTA_FILTROS)
-    public ResponseEntity<Object> consultarAfiliadosServicios(){
-        RespuestaGeneralDTO respuesta = iConsultaServicioService.consultaServiciosFiltros(filtrosServicioDTO);
+    private final IConsultaAfiliadosService iConsultaAfiliadosService;
+
+    @GetMapping("consultarAfilTipoAfil")
+    public ResponseEntity<Object> consultarAfiliadoTipoAfiliado(@RequestParam("idTipoAfiliado") Long idTipoAfiliado){
+        RespuestaGeneralDTO respuesta = iConsultaAfiliadosService.consultarAfiliadosTipoAfiliado(idTipoAfiliado);
         return new ResponseEntity<>(respuesta,respuesta.getStatus());
     }
+
+    @GetMapping("consultarAfilCodigo")
+    public ResponseEntity<Object> consultarAfiliadoCodigoAfiliado(@RequestParam("codigoAfiliado") String codigoAfiliado){
+        RespuestaGeneralDTO respuesta = iConsultaAfiliadosService.consultarAfiliadoCodigo(codigoAfiliado);
+        return new ResponseEntity<>(respuesta,respuesta.getStatus());
+    }
+
 
 }
