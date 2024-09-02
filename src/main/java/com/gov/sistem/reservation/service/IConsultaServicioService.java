@@ -7,7 +7,6 @@ public interface IConsultaServicioService {
 
     RespuestaGeneralDTO consultaServiciosTipoServicio(Long tipoServicio);
 
-    RespuestaGeneralDTO consultaServiciosReserva(String codigoReserva);
 
     RespuestaGeneralDTO consultaServiciosFiltros(FiltrosServicioDTO filtros);
 

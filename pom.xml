@@ -41,6 +41,7 @@
 			<artifactId>commons</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
+
 		<dependency>
 			<groupId>org.mapstruct</groupId>
 			<artifactId>mapstruct</artifactId>
@@ -74,7 +75,6 @@
 			<artifactId>gson</artifactId>
 			<version>2.11.0</version>
 		</dependency>
-
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
@@ -85,6 +85,7 @@
 
 	<build>
 		<plugins>
+
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -103,6 +104,48 @@
 						</path>
 					</annotationProcessorPaths>
 				</configuration>
+			</plugin>
+			<!-- Plugin de JaCoCo -->
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>0.8.12</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>prepare-agent</goal>
+						</goals>
+					</execution>
+					<!-- Este goal genera el informe después de correr las pruebas -->
+					<execution>
+						<id>report</id>
+						<phase>test</phase>
+						<goals>
+							<goal>report</goal>
+						</goals>
+					</execution>
+					<!-- Este goal verifica si la cobertura cumple con el umbral definido -->
+					<execution>
+						<id>post-test</id>
+						<goals>
+							<goal>check</goal>
+						</goals>
+						<configuration>
+							<rules>
+								<rule>
+									<element>PACKAGE</element>
+									<limits>
+										<limit>
+											<counter>LINE</counter>
+											<value>COVEREDRATIO</value>
+											<minimum>0.50</minimum>
+										</limit>
+									</limits>
+								</rule>
+							</rules>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>

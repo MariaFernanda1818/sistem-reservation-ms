@@ -2,19 +2,15 @@ package com.gov.sistem.reservation.service.impl;
 
 import com.gov.sistem.reservation.commons.dto.EstadoDTO;
 import com.gov.sistem.reservation.commons.dto.ReservaDTO;
-import com.gov.sistem.reservation.commons.dto.ReservaServicioDTO;
 import com.gov.sistem.reservation.commons.dto.ServicioDTO;
-import com.gov.sistem.reservation.commons.entity.embeddable.ReservaServicioId;
 import com.gov.sistem.reservation.commons.util.enums.EstadoEnum;
 import com.gov.sistem.reservation.commons.util.enums.InicialesCodEnum;
 import com.gov.sistem.reservation.commons.util.helper.Utilidades;
 import com.gov.sistem.reservation.commons.util.mapper.EstadoMapper;
 import com.gov.sistem.reservation.commons.util.mapper.ReservaMapper;
-import com.gov.sistem.reservation.commons.util.mapper.ReservaServicioMapper;
 import com.gov.sistem.reservation.dto.RespuestaGeneralDTO;
 import com.gov.sistem.reservation.jpa.repository.EstadoRepository;
 import com.gov.sistem.reservation.jpa.repository.ReservaRepository;
-import com.gov.sistem.reservation.jpa.repository.ReservaServicioRepository;
 import com.gov.sistem.reservation.jpa.repository.ServiciosRepository;
 import com.gov.sistem.reservation.service.ICrearReservaService;
 import com.gov.sistem.reservation.util.helper.MensajesConstants;
@@ -35,10 +31,6 @@ public class CrearReservaService implements ICrearReservaService {
     private final ReservaRepository reservaRepository;
 
     private final ReservaMapper reservaMapper;
-
-    private final ReservaServicioMapper reservaServicioMapper;
-
-    private final ReservaServicioRepository reservaServicioRepository;
 
     private final EstadoRepository estadoRepository;
 
@@ -64,20 +56,9 @@ public class CrearReservaService implements ICrearReservaService {
             reservaDTO.setCodigoReserva(codigoReserva);
             reservaDTO.setFechaCreacionReserva(LocalDate.now());
             log.info(MensajesConstants.INFO_CREAR_RESERVA);
-            reservaMapper.entityToDto(reservaRepository.save(reservaMapper.dtoToEntity(reservaDTO))).getCodigoReserva();
-            log.info(MensajesConstants.INFO_RESERVA_SERVICIOS);
-            for(ServicioDTO servicio : listServicios){
-                ReservaServicioId ids = new ReservaServicioId();
-                ids.setCodigoReservaFk(codigoReserva);
-                ids.setCodigoServicioFk(servicio.getCodigoServicio());
-                ReservaServicioDTO reservaServicioDTO = ReservaServicioDTO.builder()
-                        .reservaServicioId(ids)
-                        .reservaFk(ReservaDTO.builder().codigoReserva(codigoReserva).build())
-                        .servicioFk(ServicioDTO.builder().codigoServicio(servicio.getCodigoServicio()).build()).build();
-                reservaServicioRepository.save(reservaServicioMapper.dtoToEntity(reservaServicioDTO));
-            }
+            reservaRepository.save(reservaMapper.dtoToEntity(reservaDTO));
             respuestaGeneralDTO.setStatus(HttpStatus.CREATED);
-            respuestaGeneralDTO.setData(MensajesConstants.CREAR_RESERVA);
+            respuestaGeneralDTO.setMensaje(MensajesConstants.CREAR_RESERVA);
         }catch (Exception e){
             log.error(MensajesConstants.ERROR_CREAR_RESERVA, e);
             respuestaGeneralDTO.setStatus(HttpStatus.INTERNAL_SERVER_ERROR);

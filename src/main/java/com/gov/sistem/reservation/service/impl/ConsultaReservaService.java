@@ -1,11 +1,11 @@
 package com.gov.sistem.reservation.service.impl;
 
 import com.gov.sistem.reservation.commons.dto.ReservaDTO;
+import com.gov.sistem.reservation.commons.util.helper.Utilidades;
 import com.gov.sistem.reservation.commons.util.mapper.ReservaMapper;
 import com.gov.sistem.reservation.dto.FiltrosReservaDTO;
 import com.gov.sistem.reservation.dto.RespuestaGeneralDTO;
 import com.gov.sistem.reservation.jpa.repository.ReservaRepository;
-import com.gov.sistem.reservation.jpa.repository.ReservaServicioRepository;
 import com.gov.sistem.reservation.service.IConsultaReservaService;
 import com.gov.sistem.reservation.util.helper.MensajesConstants;
 import com.gov.sistem.reservation.util.mapper.ReservaNextMapper;
@@ -14,7 +14,6 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -32,7 +31,7 @@ public class ConsultaReservaService implements IConsultaReservaService {
         try{
             log.info(MensajesConstants.INFO_CONSULTA_RESERVAS_FILTROS);
             List<ReservaDTO> listReservas = reservaNextMapper.listObjectToListDto(reservaRepository.buscarReservasCliente(
-                    filtrosReservas.getFecha().toString(),
+                    Utilidades.checkType(filtrosReservas.getFecha(), String.class).orElse(null),
                     filtrosReservas.getNombreServicio(),
                     filtrosReservas.getCodigoCliente(),
                     filtrosReservas.getNombreCliente()

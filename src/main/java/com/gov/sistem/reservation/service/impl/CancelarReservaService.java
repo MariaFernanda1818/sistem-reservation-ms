@@ -1,15 +1,10 @@
 package com.gov.sistem.reservation.service.impl;
 
 import com.gov.sistem.reservation.commons.dto.EstadoDTO;
-import com.gov.sistem.reservation.commons.dto.ReservaDTO;
-import com.gov.sistem.reservation.commons.dto.ReservaServicioDTO;
 import com.gov.sistem.reservation.commons.util.enums.EstadoEnum;
-import com.gov.sistem.reservation.commons.util.mapper.EstadoMapper;
-import com.gov.sistem.reservation.commons.util.mapper.ReservaMapper;
 import com.gov.sistem.reservation.dto.RespuestaGeneralDTO;
 import com.gov.sistem.reservation.jpa.repository.EstadoRepository;
 import com.gov.sistem.reservation.jpa.repository.ReservaRepository;
-import com.gov.sistem.reservation.jpa.repository.ReservaServicioRepository;
 import com.gov.sistem.reservation.service.ICancelarReservaService;
 import com.gov.sistem.reservation.util.helper.MensajesConstants;
 import jakarta.transaction.Transactional;
@@ -18,14 +13,12 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 
 @Service
 @Log4j2
 @RequiredArgsConstructor
 public class CancelarReservaService implements ICancelarReservaService {
 
-    private final ReservaServicioRepository reservaServicioRepository;
     private final ReservaRepository reservaRepository;
     private final EstadoRepository estadoRepository;
 
@@ -39,9 +32,7 @@ public class CancelarReservaService implements ICancelarReservaService {
             if(estado != null) {
                 log.info(MensajesConstants.INFO_ACTUALIZA_ESTADO_RESERVA);
                 reservaRepository.actualizarEstado(estado.getIdEstado(), codigoReserva);
-                log.info(MensajesConstants.INFO_ELIMINA_SERVICIOS_RESERVA);
-                reservaServicioRepository.deleteAllByReservaFk_CodigoReserva(codigoReserva);
-                respuesta.setData(MensajesConstants.CANCELA_RESERVA);
+                respuesta.setMensaje(MensajesConstants.CANCELA_RESERVA);
                 respuesta.setStatus(HttpStatus.OK);
             }
         }catch (Exception e){

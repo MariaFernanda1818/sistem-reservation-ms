@@ -23,12 +23,6 @@ public class ServiciosController {
         return new ResponseEntity<>(respuesta,respuesta.getStatus());
     }
 
-    @GetMapping(ApiEndpointsConstants.SERVICIO_CONSULTA_CODIGO_RESERVA)
-    public ResponseEntity<Object> consultaCodigoReserva(@PathVariable("codigoReserva")String codigoReserva){
-        RespuestaGeneralDTO respuesta = iConsultaServicioService.consultaServiciosReserva(codigoReserva);
-        return new ResponseEntity<>(respuesta,respuesta.getStatus());
-    }
-
     @PostMapping(ApiEndpointsConstants.SERVICIO_CONSULTA_FILTROS)
     public ResponseEntity<Object> consultaFiltros(@RequestBody FiltrosServicioDTO filtrosServicioDTO){
         RespuestaGeneralDTO respuesta = iConsultaServicioService.consultaServiciosFiltros(filtrosServicioDTO);
